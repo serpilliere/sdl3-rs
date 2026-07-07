@@ -183,7 +183,7 @@ impl crate::EventSubsystem {
     /// # Example
     /// See [push_custom_event](#method.push_custom_event)
     #[inline(always)]
-    pub fn register_custom_event<T: ::std::any::Any>(&self) -> Result<(), Error> {
+    pub fn register_custom_event<T: ::std::any::Any>(&self) -> Result<u32, Error> {
         use std::any::TypeId;
         let event_id = *(unsafe { self.register_events(1) })?.first().unwrap();
         let mut cet = CUSTOM_EVENT_TYPES.lock().unwrap();
@@ -198,7 +198,7 @@ impl crate::EventSubsystem {
         cet.sdl_id_to_type_id.insert(event_id, type_id);
         cet.type_id_to_sdl_id.insert(type_id, event_id);
 
-        Ok(())
+        Ok(event_id)
     }
 
     /// Push a custom event
