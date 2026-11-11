@@ -955,6 +955,10 @@ pub enum Event {
 
     ClipboardUpdate {
         timestamp: u64,
+        /// `true` when this application changed the clipboard itself
+        /// (SDL_SetClipboardText, SDL_SetClipboardData...), `false` when
+        /// another application did.
+        owner: bool,
     },
 
     DropFile {
@@ -2114,9 +2118,10 @@ impl Event {
                 }
 
                 EventType::ClipboardUpdate => {
-                    let event = raw.common;
+                    let event = raw.clipboard;
                     Event::ClipboardUpdate {
                         timestamp: event.timestamp,
+                        owner: event.owner,
                     }
                 }
                 EventType::DropFile => {
